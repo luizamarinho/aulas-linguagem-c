@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-ehbissexto(int teste)
+int ehbissexto(int teste)
 {
 
     if (teste % 4 != 0)
