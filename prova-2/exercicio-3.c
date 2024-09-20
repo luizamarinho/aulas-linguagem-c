@@ -25,11 +25,11 @@ int main()
         {
             printf("Insira a nota e o peso ");
             scanf("%f %f", &nota, &peso);
-            somaN = somaN + (nota * peso);
-            somaP = somaP + peso;
+            somaN = somaN + (nota * peso); // multiplica todas as notas pelos pesos e depois soma
+            somaP = somaP + peso;          // soma todos os pesos
             indiceNotas++;
         }
-        media = somaN / somaP;
+        media = somaN / somaP; // divide a soma de todas as notas (* pesos) pela soma de todos os pesos
         printf("A média ponderada eh %.2f\n", media);
         indiceNotas = 1;
         somaN = 0;
@@ -37,6 +37,6 @@ int main()
         somaTurma = somaTurma + media;
         indiceAlunos++;
     }
-    mediaTurma = somaTurma / numeroAlunos;
+    mediaTurma = somaTurma / numeroAlunos; // soma todas as medias da turma e divide pela quantidade de alunos
     printf("a media da turma eh %.2f\n", mediaTurma);
 }

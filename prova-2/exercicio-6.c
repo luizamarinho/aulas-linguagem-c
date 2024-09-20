@@ -11,15 +11,15 @@
 int ehprimo(int valor)
 {
     int indice2 = 2;
-    while (indice2 < valor)
+    while (indice2 < valor) // laço de repetição que percorre todos os valores anteriores ao valor informado
     {
         if (valor % indice2 == 0)
         {
-            return 0;
+            return 0; // retorna 0 se o valor for divisivel por algum número que não seja 1 nem ele mesmo,ou seja, não pode ser primo
         }
         indice2 = indice2 + 1;
     }
-    return 1;
+    return 1; // retorna 1 se não for divisível por nenhum valor (além de 1 e ele mesmo, que não são testados)
 }
 
 int main()
@@ -31,15 +31,15 @@ int main()
     int primos = 0;
     int indice = inicial;
 
-    while (indice <= final)
+    while (indice <= final) // percorre do valor inicial ao valor final
     {
 
-        int resultado = ehprimo(indice);
+        int resultado = ehprimo(indice); // chama a função que retorna se o número é primo ou não e armazena em uma variável
         if (indice != 1)
         {
-            if (resultado == 1)
+            if (resultado == 1) // testa se o retorno da função é igual a 1, ou seja, é um valor primo
             {
-                printf("%d ", indice);
+                printf("%d ", indice); // se for primo, imprime o valor na tela
                 primos = primos + 1;
             }
         }

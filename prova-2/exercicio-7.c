@@ -16,7 +16,7 @@ int main()
     {
         printf("Insira a nota ");
         scanf("%d", &nota);
-        int media = nota;
+        int media = nota; // por ser uma nota só, a média do aluno é igual a unica nota que foi recebida.
         printf("Média do aluno eh %d\n", media);
         if (media >= 7)
         {

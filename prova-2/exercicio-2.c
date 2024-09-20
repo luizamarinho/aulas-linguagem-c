@@ -14,21 +14,21 @@ int main()
     printf("Insira um numero ");
     scanf("%d", &numero);
 
-    while (indice < numero)
+    while (indice < numero) // laço de repetição para percorrer testando todos os divisores menores que numero (exceto ele mesmo)
     {
 
         if (numero % indice == 0)
         {
-            soma = soma + indice;
+            soma = soma + indice; // soma os divisores do numero inserido
         }
         indice = indice + 1;
     }
 
-    if (soma == numero)
+    if (soma == numero) // se a soma dos divisores for igual ao numero é um numero perfeito
     {
         printf("%d eh um numero perfeito\n", numero);
     }
-    else
+    else // se a soma dos divisores for diferente do numero não é um numero perfeito
     {
         printf("%d nao eh um numero perfeito\n", numero);
     }

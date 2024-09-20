@@ -23,7 +23,7 @@ int main()
 
     float montante = valor_inicial;
 
-    while (indice <= anos)
+    while (indice <= anos) // laço de repetição que calcula o valor a cada ano
     {
 
         rendimento = montante * (juros / 100);
