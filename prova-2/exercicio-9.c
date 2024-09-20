@@ -10,31 +10,39 @@ int main()
     float nota;
     int indice = 1;
     int numeroAlunos = 5;
-    int indiceNotas = 1;
+
     int quantNotas = 2;
     float somaN = 0;
     float media;
 
-    while (indiceNotas <= quantNotas)
+    while (indice <= numeroAlunos)
     {
-        printf("Insira a nota \n");
-        scanf("%f", &nota);
-        somaN = somaN + nota;
-        indiceNotas++;
-    }
+        int indiceNotas = 1;
+        media = 0;
+        somaN = 0;
+        while (indiceNotas <= quantNotas)
+        {
+            printf("Insira a nota ");
+            scanf("%f", &nota);
+            somaN = somaN + nota;
+            indiceNotas++;
+        }
 
-    media = somaN / quantNotas;
-    printf("%.2f\n", media);
-    if (media >= 7.0)
-    {
-        printf("Aluno aprovado\n");
-    }
-    else if (media >= 5.0 && media <= 6.9)
-    {
-        printf("Recuperação\n");
-    }
-    else if (media < 5.0)
-    {
-        printf("Aluno reprovado\n");
+        media = somaN / quantNotas;
+        printf("A media eh %.1f\n", media);
+        if (media >= 7.0)
+        {
+            printf("Aluno aprovado\n");
+        }
+        else if (media >= 5.0 && media <= 6.9)
+        {
+            printf("Recuperação\n");
+        }
+        else if (media < 5.0)
+        {
+            printf("Aluno reprovado\n");
+        }
+
+        indice = indice + 1;
     }
 }
