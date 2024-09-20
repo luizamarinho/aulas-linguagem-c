@@ -15,12 +15,12 @@ int main()
     float somaN = 0;
     float media;
 
-    while (indice <= numeroAlunos)
+    while (indice <= numeroAlunos) // laço de repetição para repetir o código de acordo com o número de alunos
     {
         int indiceNotas = 1;
         media = 0;
         somaN = 0;
-        while (indiceNotas <= quantNotas)
+        while (indiceNotas <= quantNotas) // laço de repetição para repetir o código de acordo com o número de notas a serem inseridas (por aluno)
         {
             printf("Insira a nota ");
             scanf("%f", &nota);
@@ -28,7 +28,7 @@ int main()
             indiceNotas++;
         }
 
-        media = somaN / quantNotas;
+        media = somaN / quantNotas; // calcula a media das notas dividindo a soma total pela quantidade de notas inseridas
         printf("A media eh %.1f\n", media);
         if (media >= 7.0)
         {
