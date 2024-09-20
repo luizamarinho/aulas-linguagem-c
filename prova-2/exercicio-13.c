@@ -14,27 +14,32 @@ int main()
     int opcao;
     float temperatura;
     float tFinal;
+    int continuar = 0; // 0 para sim, 1 para nao
 
-    printf("1. Converter Celsius para Fahrenheit.\n2. Converter Fahrenheit para Celsius.\n3. Sair.\n");
-    scanf("%d", &opcao);
-    printf("Insira a temperatura ");
-    scanf("%f", &temperatura);
-
-    if (opcao == 1)
+    while (continuar == 0)
     {
-        // converter de celsius para fahrenheit
-        tFinal = (temperatura * (9 / 5)) + 32;
-    }
-    else if (opcao == 2)
-    {
-        // converter de fahrenheit para celsius
+        printf("1. Converter Celsius para Fahrenheit.\n2. Converter Fahrenheit para Celsius.\n3. Sair.\n");
+        scanf("%d", &opcao);
 
-        tFinal = (temperatura - 32) * (5 / 9);
+        if (opcao == 1)
+        {
+            // converter de celsius para fahrenheit
+            printf("Insira a temperatura ");
+            scanf("%f", &temperatura);
+            tFinal = (temperatura * 1.8) + 32;
+            printf("%.1f F\n", tFinal);
+        }
+        else if (opcao == 2)
+        {
+            // converter de fahrenheit para celsius
+            printf("Insira a temperatura ");
+            scanf("%f", &temperatura);
+            tFinal = (temperatura - 32) / 1.8;
+            printf("%.1f C\n", tFinal);
+        }
+        else if (opcao == 3)
+        {
+            continuar = 1;
+        }
     }
-    else if (opcao == 3)
-    {
-        // parar programa
-    }
-
-    printf("%.1f\n", tFinal);
 }
