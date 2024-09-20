@@ -13,18 +13,47 @@
 #include <stdlib.h>
 #include <time.h>
 
+int func_adivinha(int valor)
+{
+    int tentativa = 1;
+    int palpite;
+    while (tentativa <= 7)
+    {
+        printf("Insira o palpite (%d/7)", tentativa);
+        scanf("%d", &palpite);
+
+        if (palpite == valor)
+        {
+            return 1; // se acertar o programa retorna o valor e para de executar
+        }
+        else if (palpite > valor)
+        {
+            printf("Palpite muito alto\n");
+        }
+        else if (palpite < valor)
+        {
+            printf("Palpite muito baixo\n");
+        }
+        tentativa++;
+    }
+    return 0; // se acabarem as tentativas o programa retorna 0 e para de executar
+}
+
 int main()
 {
     int numero = time(0);
-    srand(numero);
+    srand(numero); // impede do código repetir o mesmo número toda vez que for gerado, usando o horário como seed
 
-    // chamando uma vez pra aquecer o rand e maximizar a entropia
-    rand();
+    int aleatorio = (rand() % 100) + 1; // gera um número aleatorio entre 1 e 100
 
-    float rand_max = RAND_MAX; // o RAND_MAX é int. A operação será feita de maneira inteira, então vai desprezar o número com virgula. Preciso que ele seja float para gerar o número dentro do intervalo 0-1
+    printf("%d\n", aleatorio); // código comentado para mostrar o número aleatório em caso de testes
 
-    float aleatorio_f = (rand() / rand_max) * 100; // o resultado da divisão está entre zero e 1. Posteriormente ele multiplica por 100 pra aumentar o intervalo para 0 - 100
-    int aleatorio = aleatorio_f;                   // converte de float para int. despreza a casa decimal sem arredondar.
-
-    printf("%d\n", aleatorio);
+    if (func_adivinha(aleatorio) == 1)
+    {
+        printf("Parabéns, você acertou!\n");
+    }
+    else
+    {
+        printf("Você não tem mais tentativas\n");
+    }
 }
