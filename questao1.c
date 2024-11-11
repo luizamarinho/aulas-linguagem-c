@@ -15,7 +15,7 @@ int main()
     file = fopen("frases.txt", "a");
     if (file == NULL)
     {
-        printf("Erro ao abrir o arquivo para a escrita. \n");
+        printf("Erro ao abrir o arquivo para a escrita.\n");
         return 1;
     }
 

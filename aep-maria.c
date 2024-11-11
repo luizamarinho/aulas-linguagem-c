@@ -1,10 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Função para limpar a tela de forma portável
+void limparTela()
+{
+#ifdef _WIN32 // Se o sistema for Windows
+    system("cls");
+#else // Para sistemas Unix (Linux, macOS, etc.)
+    system("clear");
+#endif
+}
 
 int menuPrincipal()
 {
     int opcao;
 
-    system("cls");
+    limparTela(); // Chama a função para limpar a tela
     printf("SISTEMA DE INCLUSAO DE USUARIOS\n\n");
     printf("1 - Incluir novo usuario\n");
     printf("2 - Alterar usuario\n");
@@ -15,27 +27,9 @@ int menuPrincipal()
     printf("Opcao: ");
 
     scanf("%i", &opcao);
+    getchar(); // Limpa o buffer de entrada após a leitura do inteiro
 
     return opcao;
-}
-
-void menuIncluirUsuario()
-{
-    char nome[100], senha[100];
-
-    system("cls");
-    printf("SISTEMA DE INCLUSAO DE USUARIOS\n\n");
-
-    printf("Escreva o nome: \n");
-    fflush(stdin);
-    scanf("%[^\n]s", &nome);
-    fflush(stdin);
-    printf("Digite sua senha: \n");
-    scanf("%[^\n]s", &senha);
-    fflush(stdin);
-
-    salvaUsuario(nome, senha);
-    printf("Dados armazenados com sucesso!\n");
 }
 
 int salvaUsuario(char nomeUsuario[100], char senhaUsuario[100])
@@ -47,117 +41,214 @@ int salvaUsuario(char nomeUsuario[100], char senhaUsuario[100])
     if (file == NULL)
     {
         printf("Erro ao abrir o arquivo para escrita.\n");
+        return 1; // Retorna erro caso o arquivo não possa ser aberto
+    }
+
+    fprintf(file, "%s\n", nomeUsuario);
+    fprintf(file, "%s\n", senhaUsuario);
+
+    fclose(file);
+    return 0; // Retorna sucesso
+}
+
+void menuIncluirUsuario()
+{
+    char nome[100], senha[100];
+
+    limparTela(); // Chama a função para limpar a tela
+    printf("SISTEMA DE INCLUSAO DE USUARIOS\n\n");
+
+    printf("Escreva o nome: \n");
+    fgets(nome, sizeof(nome), stdin); // Lê a string com espaços
+    nome[strcspn(nome, "\n")] = 0;    // Remove a nova linha, se presente
+
+    printf("Digite sua senha: \n");
+    fgets(senha, sizeof(senha), stdin); // Lê a senha com espaços
+    senha[strcspn(senha, "\n")] = 0;    // Remove a nova linha, se presente
+
+    if (salvaUsuario(nome, senha) == 0)
+    {
+        printf("Dados armazenados com sucesso!\n");
+    }
+    else
+    {
+        printf("Erro ao salvar os dados!\n");
+    }
+}
+
+int alterarUsuario(int indice, char nomeNovo[100], char senhaNova[100])
+{
+    FILE *file = fopen("BancoDeDadosAEP.txt", "r+");
+    if (file == NULL)
+    {
+        printf("Erro ao abrir o arquivo para leitura e escrita.\n");
         return 1;
     }
 
-    fflush(stdin);
-    fprintf(file, "%s\n", nomeUsuario);
-    fflush(stdin);
-    fprintf(file, "%s\n", senhaUsuario);
-    fflush(stdin);
+    FILE *newFile = fopen("temp.txt", "w");
+    if (newFile == NULL)
+    {
+        printf("Erro ao abrir o arquivo temporário para escrita.\n");
+        fclose(file);
+        return 1;
+    }
+
+    rewind(file);
+
+    char anterior[100];
+    int cont = 0;
+
+    // Copia os dados até o usuário que será alterado
+    while (cont++ != indice)
+    {
+        fgets(anterior, sizeof(anterior), file);
+        fprintf(newFile, "%s", anterior);
+        fgets(anterior, sizeof(anterior), file);
+        fprintf(newFile, "%s", anterior);
+    }
+
+    // Escreve os dados alterados
+    fprintf(newFile, "%s\n", nomeNovo);
+    fprintf(newFile, "%s\n", senhaNova);
+
+    // Copia o restante dos dados
+    while (fgets(anterior, sizeof(anterior), file) != NULL)
+    {
+        fprintf(newFile, "%s", anterior);
+    }
 
     fclose(file);
+    fclose(newFile);
+
+    // Substitui o arquivo original pelo temporário
+    remove("BancoDeDadosAEP.txt");
+    rename("temp.txt", "BancoDeDadosAEP.txt");
+
+    return 0; // Retorna sucesso
 }
 
 void menuAlterarUsuario()
 {
     FILE *fileLeitura = fopen("BancoDeDadosAEP.txt", "r");
 
+    if (fileLeitura == NULL)
+    {
+        printf("Erro ao abrir o arquivo para leitura.\n");
+        return;
+    }
+
     char nomeAntigo[100], senhaAntiga[100], nomeNovo[100], senhaNova[100];
     char nomeEncontrado[100], senhaEncontrada[100];
     int numeroRegistro = -1;
 
-    system("cls");
+    limparTela(); // Chama a função para limpar a tela
     printf("SISTEMA DE INCLUSAO DE USUARIOS\n\n");
 
     printf("Escreva o nome do usuário que deseja alterar: \n");
-    fflush(stdin);
-    scanf("%[^\n]s", &nomeAntigo);
-    fflush(stdin);
+    fgets(nomeAntigo, sizeof(nomeAntigo), stdin); // Lê a string com espaços
+    nomeAntigo[strcspn(nomeAntigo, "\n")] = 0;    // Remove a nova linha, se presente
+
     printf("Para confirmar, digite a senha anterior: \n");
-    scanf("%[^\n]s", &senhaAntiga);
+    fgets(senhaAntiga, sizeof(senhaAntiga), stdin); // Lê a senha com espaços
+    senhaAntiga[strcspn(senhaAntiga, "\n")] = 0;    // Remove a nova linha, se presente
 
-    while (strcmp(nomeAntigo, nomeEncontrado) != 0 && strcmp(senhaAntiga, senhaEncontrada) != 0)
+    while (fscanf(fileLeitura, "%[^\n]s", nomeEncontrado) != EOF)
     {
-        fflush(stdin);
-        int retornoNome = fscanf(fileLeitura, "%[^\n]s", nomeEncontrado);
+        fseek(fileLeitura, 2, SEEK_CUR); // Pula a quebra de linha
+        fscanf(fileLeitura, "%[^\n]s", senhaEncontrada);
         fseek(fileLeitura, 2, SEEK_CUR); // Pula a quebra de linha
 
-        fflush(stdin);
-        int retornoSenha = fscanf(fileLeitura, "%[^\n]s", senhaEncontrada);
-        fseek(fileLeitura, 2, SEEK_CUR); // Pula a quebra de linha
+        numeroRegistro++;
 
-        numeroRegistro = numeroRegistro + 1;
-
-        if (retornoNome == EOF || retornoSenha == EOF)
+        if (strcmp(nomeAntigo, nomeEncontrado) == 0 && strcmp(senhaAntiga, senhaEncontrada) == 0)
         {
-            printf("Usuario nao encontrado.\n");
-            fclose(fileLeitura);
-            return;
+            break;
         }
     }
 
-    fflush(stdin);
-    printf("Altere o nome do usuário: \n");
-    scanf("%[^\n]s", &nomeNovo);
-    fflush(stdin);
-    printf("Alterar a senha: \n");
-    scanf("%[^\n]s", &senhaNova);
+    fclose(fileLeitura);
 
-    alterarUsuario(numeroRegistro, nomeNovo, senhaNova);
+    if (numeroRegistro == -1)
+    {
+        printf("Usuário não encontrado ou senha incorreta.\n");
+        return;
+    }
+
+    printf("Altere o nome do usuário: \n");
+    fgets(nomeNovo, sizeof(nomeNovo), stdin); // Lê a string com espaços
+    nomeNovo[strcspn(nomeNovo, "\n")] = 0;    // Remove a nova linha, se presente
+
+    printf("Alterar a senha: \n");
+    fgets(senhaNova, sizeof(senhaNova), stdin); // Lê a senha com espaços
+    senhaNova[strcspn(senhaNova, "\n")] = 0;    // Remove a nova linha, se presente
+
+    if (alterarUsuario(numeroRegistro, nomeNovo, senhaNova) == 0)
+    {
+        printf("\nUsuario alterado com sucesso!\n");
+    }
+    else
+    {
+        printf("\nErro ao alterar o usuário.\n");
+    }
 }
 
-void alterarUsuario(int indice, char nomeNovo[100], char senhaNova[100])
+int alterarUsuario(int indice, char nomeNovo[100], char senhaNova[100])
 {
     FILE *file = fopen("BancoDeDadosAEP.txt", "r+");
+    if (file == NULL)
+    {
+        printf("Erro ao abrir o arquivo para leitura e escrita.\n");
+        return 1;
+    }
+
     FILE *newFile = fopen("temp.txt", "w");
+    if (newFile == NULL)
+    {
+        printf("Erro ao abrir o arquivo temporário para escrita.\n");
+        fclose(file);
+        return 1;
+    }
 
     rewind(file);
 
-    int cont = 0;
     char anterior[100];
+    int cont = 0;
 
+    // Copia os dados até o usuário que será alterado
     while (cont++ != indice)
     {
-        fflush(stdin);
         fgets(anterior, sizeof(anterior), file);
         fprintf(newFile, "%s", anterior);
-        fflush(stdin);
         fgets(anterior, sizeof(anterior), file);
         fprintf(newFile, "%s", anterior);
     }
 
-    fflush(stdin);
+    // Escreve os dados alterados
     fprintf(newFile, "%s\n", nomeNovo);
-    fflush(stdin);
     fprintf(newFile, "%s\n", senhaNova);
 
-    fgets(anterior, sizeof(anterior), file);
-    fgets(anterior, sizeof(anterior), file);
-
-    while (fscanf(file, "%[^\n]s", anterior) != EOF && fseek(file, 2, SEEK_CUR) == 0)
+    // Copia o restante dos dados
+    while (fgets(anterior, sizeof(anterior), file) != NULL)
     {
-        fflush(stdin);
-        fprintf(newFile, "%s\n", anterior);
-        fflush(stdin);
+        fprintf(newFile, "%s", anterior);
     }
 
     fclose(file);
     fclose(newFile);
 
+    // Substitui o arquivo original pelo temporário
     remove("BancoDeDadosAEP.txt");
     rename("temp.txt", "BancoDeDadosAEP.txt");
 
-    printf("\nUsuario alterado!\n");
+    return 0; // Retorna sucesso
 }
 
-void main()
+int main()
 {
     int opcao = -1;
 
     while (opcao != 0)
     {
-
         opcao = menuPrincipal();
 
         switch (opcao)
@@ -168,11 +259,15 @@ void main()
         case 2:
             menuAlterarUsuario();
             break;
+        case 0:
+            printf("Saindo...\n");
+            break;
+        default:
+            printf("Opção inválida!\n");
         }
 
         system("pause");
     }
 
-    // Saída
     return 0;
 }

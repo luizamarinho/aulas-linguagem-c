@@ -2,14 +2,14 @@
 
 int main()
 {
-    FILE *file;
-    char line[100];
+    FILE *file;     // cria uma variável para guardar uma referência para o arquivo (txt) | FILE é um tipo/struct
+    char line[100]; // string de até 99 elementos
 
-    file = fopen("example.txt", "w");
-    if (file == NULL)
+    file = fopen("example.txt", "w"); // abre o arquivo para escrita (se houver um arquivo ele será sobrescrito)
+    if (file == NULL)                 // primeira coisa a ser feita ao tentar abrir um arquivo: confirma se o arquivo não deu erro.
     {
         printf("Erro ao abrir o arquivo para a escrita. \n");
-        return 1;
+        return 1; // early exit. Para a execução do programa.
     }
 
     fprintf(file, "Linha 1: Hello, World! \n");
