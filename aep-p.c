@@ -43,13 +43,13 @@ void descriptografar(char linha[TAM_MAX_LINHA])
 
 int ler_arquivo(char dados[MAX_USUARIOS][TAM_MAX_LINHA])
 {
-    FILE *arquivo = fopen("base_de_dados.txt", "r");
-    if (arquivo != NULL)
+    FILE *arquivo = fopen("base_de_dados.txt", "r"); // abre o arquivo para leitura
+    if (arquivo != NULL)                             // testa se o arquivo abriu
     {
         for (int i = 0; i < MAX_USUARIOS; i++)
         {
-            fgets(dados[i], TAM_MAX_LINHA, arquivo);
-            descriptografar(dados[i]);
+            fgets(dados[i], TAM_MAX_LINHA, arquivo); // envia os dados para o arquivo
+            descriptografar(dados[i]);               // os arquivos na base de dados estão criptografados, então existe uma função para descriptografar e manipular os dados
         }
 
         fclose(arquivo);
@@ -72,7 +72,7 @@ int ler_arquivo(char dados[MAX_USUARIOS][TAM_MAX_LINHA])
 
 int salvar_arquivo(char dados[MAX_USUARIOS][TAM_MAX_LINHA])
 {
-    FILE *arquivo = fopen("base_de_dados.txt", "w");
+    FILE *arquivo = fopen("base_de_dados.txt", "w"); // abre o arquivo para escrita sobrescrevendo o conteúdo anterior: salvando uma nova versão
     if (arquivo == NULL)
     {
         return 0;
@@ -80,7 +80,7 @@ int salvar_arquivo(char dados[MAX_USUARIOS][TAM_MAX_LINHA])
 
     for (int i = 0; i < MAX_USUARIOS; i++)
     {
-        char copia[TAM_MAX_LINHA];
+        char copia[TAM_MAX_LINHA]; // cria uma cópia que vai ser usada para as modificaçoes e depois implementa
 
         for (int j = 0; j < TAM_MAX_LINHA; j++)
         {
@@ -103,7 +103,8 @@ void sobrescrever_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], int posicao, 
 {
     int branco = 0;
 
-    // copia conteudo da string completando com espaco a direita
+    // copia conteudo da string completando com espaco a direita para apagar possíveis lixos de memória
+    // nome:
     for (int i = 0; i < TAM_MAX_NOME; i++)
     {
         if (nome[i] == '\0' || nome[i] == '\n' || branco == 1)
@@ -121,6 +122,7 @@ void sobrescrever_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], int posicao, 
 
     // copia conteudo da string completando com espaco a direita
     // deslocando para nao substituir o que acabamos de escrever
+    // senha:
     for (int i = 0; i < TAM_MAX_SENHA; i++)
     {
         if (senha[i] == '\0' || senha[i] == '\n' || branco == 1)
@@ -141,7 +143,7 @@ int incluir_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], char nome[TAM_MAX_N
     {
         if (dados[i][0] == ' ') // usuario vazio
         {
-            sobrescrever_usuario(dados, i, nome, senha);
+            sobrescrever_usuario(dados, i, nome, senha); // usa a função sobrescrever usuario para incluir um novo usuario no "espaço em branco"
             return 1;
         }
     }
@@ -149,7 +151,7 @@ int incluir_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], char nome[TAM_MAX_N
     return 0;
 }
 
-void excluir_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], int posicao)
+void excluir_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], int posicao) // sobrescreve o conteúdo anterior com um espaço em branco
 {
     for (int i = 0; i < TAM_MAX_LINHA - 2; i++)
     {
@@ -157,7 +159,7 @@ void excluir_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], int posicao)
     }
 }
 
-int buscar_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], char nome[TAM_MAX_NOME + 1])
+int buscar_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], char nome[TAM_MAX_NOME + 1]) // função que percorre um laço buscando os dados que foram fornecidos. Caso encontre, retorna para o principal.
 {
     for (int i = 0; i < MAX_USUARIOS; i++)
     {
@@ -187,9 +189,9 @@ int buscar_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], char nome[TAM_MAX_NO
     return -1;
 }
 
-int exibir_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], int posicao)
+int exibir_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], int posicao) //
 {
-    if (dados[posicao][0] == ' ')
+    if (dados[posicao][0] == ' ') // se não tiver nada, retorna para a função principal.
     {
         return 0;
     }
@@ -203,14 +205,14 @@ int exibir_usuario(char dados[MAX_USUARIOS][TAM_MAX_LINHA], int posicao)
             nome[i] = dados[posicao][i];
         }
         nome[TAM_MAX_NOME] = '\0';
-        trim(nome, TAM_MAX_NOME + 1);
+        trim(nome, TAM_MAX_NOME + 1); // substituir espaços em branco
 
         for (int i = 0; i < TAM_MAX_SENHA; i++)
         {
             senha[i] = dados[posicao][TAM_MAX_NOME + i];
         }
         senha[TAM_MAX_SENHA] = '\0';
-        trim(senha, TAM_MAX_SENHA + 1);
+        trim(senha, TAM_MAX_SENHA + 1); // substituir espaços em branco
 
         printf("%d) Nome: %s | Senha: ********\n", (posicao + 1), nome);
 
@@ -240,7 +242,7 @@ int main()
 
         int sucesso = 0;
 
-        if (alternativa == 1)
+        if (alternativa == 1) // alternativa para incluir usuario
         {
             char nome[TAM_MAX_NOME + 1];
             char senha[TAM_MAX_SENHA + 1];
@@ -249,13 +251,13 @@ int main()
             scanf("%s", nome);
             printf("\n");
 
-            if (buscar_usuario(dados, nome) == -1)
+            if (buscar_usuario(dados, nome) == -1) // verifica se o usuario já existe
             {
                 printf("Insira a senha do usuario (max %d caracteres, nao pode ter espacos):\n", TAM_MAX_SENHA);
                 scanf("%s", senha);
                 printf("\n");
 
-                if (incluir_usuario(dados, nome, senha) == 0)
+                if (incluir_usuario(dados, nome, senha) == 0) // verifica se o limite de usuarios foi atingido
                 {
                     printf("Nao foi possivel inserir. Numero maximo de usuarios atingido.\n");
                 }
@@ -269,17 +271,17 @@ int main()
                 printf("O usuário ja existe. Utilize a opcao 2 para altera-lo.\n");
             }
         }
-        else if (alternativa == 2)
+        else if (alternativa == 2) // alternativa para alterar um usuario já existente
         {
 
             char nome[TAM_MAX_NOME + 1];
             char senha[TAM_MAX_SENHA + 1];
 
-            printf("Insira o nome do usuario a ser alterado (max %d caracteres, nao pode ter espacos):\n", TAM_MAX_NOME);
+            printf("Insira o nome do usuario a ser alterado (max %d caracteres, nao pode ter espacos):\n", TAM_MAX_NOME); // solicita o nome do usuario a ser modificado
             scanf("%s", nome);
             printf("\n");
 
-            int posicao = buscar_usuario(dados, nome);
+            int posicao = buscar_usuario(dados, nome); // busca o usuario no banco de dados para verificar se ele existe
 
             if (posicao != -1)
             {
@@ -304,7 +306,7 @@ int main()
                 scanf("%s", senha);
                 printf("\n");
 
-                sobrescrever_usuario(dados, posicao, nome, senha);
+                sobrescrever_usuario(dados, posicao, nome, senha); // chama a função para sobrescrever os dados
 
                 sucesso = 1;
             }
@@ -313,7 +315,7 @@ int main()
                 printf("Usuario nao encontrado. Utilize a opcao 1 para cadastra-lo.\n");
             }
         }
-        else if (alternativa == 3)
+        else if (alternativa == 3) // alternativa para excluir um usuario
         {
 
             char nome[TAM_MAX_NOME + 1];
@@ -322,11 +324,11 @@ int main()
             scanf("%s", nome);
             printf("\n");
 
-            int posicao = buscar_usuario(dados, nome);
+            int posicao = buscar_usuario(dados, nome); // verifica se existe o usuario informado
 
             if (posicao != -1)
             {
-                excluir_usuario(dados, posicao);
+                excluir_usuario(dados, posicao); // exclui o usuario informado
                 sucesso = 1;
             }
             else
@@ -334,7 +336,7 @@ int main()
                 printf("Usuario nao encontrado. Confira o nome e tente novamente.\n");
             }
         }
-        else if (alternativa == 4)
+        else if (alternativa == 4) // alternativa para listar na tela os usuários existentes no banco de dados
         {
             int vazio = 1;
             for (int i = 0; i < MAX_USUARIOS; i++)
@@ -351,14 +353,14 @@ int main()
             }
         }
 
-        salvar_arquivo(dados);
+        salvar_arquivo(dados); // salva o arquivo na base de dados
 
         if (sucesso)
         {
-            printf("\nOperacao realizada com sucesso\n");
+            printf("\nOperacao realizada com sucesso\n"); // mensagem de confirmação ao final de cada operação realizada com sucesso
         }
 
-        if (alternativa != 5)
+        if (alternativa != 5) // alternativa para parar o menu
         {
             printf("\n\n");
         }
