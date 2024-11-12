@@ -9,13 +9,13 @@
 
 int calculoVendas(int inicial, int vendida)
 {
-    inicial = inicial - vendida;
-    return inicial;
+    int final = inicial - vendida;
+    return final;
 }
 
 int main()
 {
-    int quant_inicial[MAX_PRODUTOS];
+    int quant_inicial[MAX_PRODUTOS]; // tipo: array de int com MAX_PRODUTOS (5) elementos
     int quant_vendida[MAX_PRODUTOS];
     int quant_final[MAX_PRODUTOS];
 
