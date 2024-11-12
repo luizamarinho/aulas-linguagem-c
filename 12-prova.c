@@ -4,13 +4,34 @@
 
 #include <stdio.h>
 
+#define MAX_PRODUTOS 5 // temporariamente 5
+
+int verificadorPromo(int quantidade)
+{
+    if (quantidade >= 100)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
 int main()
 {
-    int vendas[100];
+    int vendas[MAX_PRODUTOS];
     int i;
 
-    for (i = 0; i < 100; i++)
+    for (i = 0; i < MAX_PRODUTOS; i++)
     {
-        vendas[i] = i;
+        printf("Insira a quantidade de unidades vendidas do livro %d\n", (i + 1));
+        scanf("%d", &vendas[i]);
+    }
+
+    for (i = 0; i < MAX_PRODUTOS; i++)
+    {
+        if (verificadorPromo(vendas[i]) == 1)
+        {
+            printf("Livro %d deve entrar em promo\n", (i + 1));
+        };
     }
 }
