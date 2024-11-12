@@ -19,15 +19,14 @@ int verificadorPromo(int quantidade)
 int main()
 {
     int vendas[MAX_PRODUTOS];
-    int i;
 
-    for (i = 0; i < MAX_PRODUTOS; i++)
+    for (int i = 0; i < MAX_PRODUTOS; i++)
     {
         printf("Insira a quantidade de unidades vendidas do livro %d\n", (i + 1));
         scanf("%d", &vendas[i]);
     }
 
-    for (i = 0; i < MAX_PRODUTOS; i++)
+    for (int i = 0; i < MAX_PRODUTOS; i++)
     {
         if (verificadorPromo(vendas[i]) == 1)
         {

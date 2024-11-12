@@ -19,9 +19,7 @@ int main()
     int quant_vendida[MAX_PRODUTOS];
     int quant_final[MAX_PRODUTOS];
 
-    int i;
-
-    for (i = 0; i < MAX_PRODUTOS; i++)
+    for (int i = 0; i < MAX_PRODUTOS; i++)
     {
 
         printf("Insira a quantidade inicial do produto %d\n", (i + 1));
@@ -45,7 +43,7 @@ int main()
         }
     }
 
-    for (i = 0; i < MAX_PRODUTOS; i++)
+    for (int i = 0; i < MAX_PRODUTOS; i++)
     {
         printf("A quantidade atualizada do produto %d eh %d\n", (i + 1), quant_final[i]);
     }
